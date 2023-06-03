@@ -20,5 +20,6 @@ for stop in data:
 
 # logging.debug(f"found lines: {lines}")
 print("Line names and number of stops:")
-for line in lines.items():
-    print(f"bus_id: {line[0]}, stops: {line[1]}")
+for line, stops in lines.items():
+    logging.debug(line)
+    print(f"bus_id: {line}, stops: {stops}")
