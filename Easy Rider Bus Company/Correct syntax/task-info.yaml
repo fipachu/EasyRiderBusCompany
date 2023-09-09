@@ -1,11 +1,11 @@
 type: edu
 files:
-- name: test/__init__.py
-  visible: false
-  learner_created: false
-- name: test/tests.py
-  visible: false
-  text: "from hstest.stage_test import *\nfrom hstest.test_case import TestCase\n\
+  - name: test/__init__.py
+    visible: false
+    learner_created: false
+  - name: test/tests.py
+    visible: false
+    text: "from hstest.stage_test import *\nfrom hstest.test_case import TestCase\n\
     import re\n\n\nclass EasyRiderStage2(StageTest):\n    def generate(self) -> List[TestCase]:\n\
     \        return [\n            TestCase(stdin='[{\"bus_id\" : 128, \"stop_id\"\
     \ : 1, \"stop_name\" : \"Prospekt Av.\", \"next_stop\" : 3, \"stop_type\" : \"\
@@ -157,65 +157,65 @@ files:
     \ {result[1]}\\n\"\n                                     f\"stop_type: {result[2]}\\\
     n\"\n                                     f\"a_time: {result[3]}\")\n        return\
     \ CheckResult.correct()\n\n\nif __name__ == '__main__':\n    EasyRiderStage2('easyrider.easyrider').run_tests()\n"
-  learner_created: false
-- name: tests.py
-  visible: false
-  text: |
-    from test.tests import EasyRiderStage2
-
-    if __name__ == '__main__':
-        EasyRiderStage2('easyrider.easyrider').run_tests()
-  learner_created: false
-- name: easyrider/easyrider.py
-  visible: true
-  text: |
-    import json
-    import logging
-    import sys
-
-    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-
-
-    data = json.loads(input())
-    # logging.debug(data)
-
-    required_keys = ['bus_id', 'stop_id', 'stop_name',
-                     'next_stop', 'a_time']
-    STOP_TYPE = 'stop_type'
-    all_keys = required_keys.copy()
-    all_keys.insert(4, STOP_TYPE)
-    # logging.debug(all_keys)
-
-    data_types = dict(zip(all_keys, [int, int, str, int, str, str]))
-    # logging.debug(repr(data_types))
-
-    errors = {key: 0 for key in all_keys}
-    # logging.debug(errors)
-
-    # logging.debug(type(data[1]['stop_type']))
-
-    for data_item in data:
-        for key in all_keys:
-            if type(data_item[key]) != data_types[key] \
-                    or key in required_keys and data_item[key] == "" \
-                    or key not in required_keys and len(data_item[STOP_TYPE]) > 1:
-                errors[key] += 1
-            # equivalent to:
-            #
-            # if key in required_keys and data_item[key] == "":
-            #     errors[key] += 1
-            # elif key not in required_keys and len(data_item[STOP_TYPE]) > 1:
-            #     errors[key] += 1
-            # elif type(data_item[key]) != data_types[key]:
-            #     errors[key] += 1
-    # logging.debug(f"{errors=}")
-
-    errors_total = sum(errors.values())
-
-    print(f'Type and required field validation: {errors_total} errors')
-    for error, value in errors.items():
-        print(f"{error}: {value}")
-  learner_created: false
+    learner_created: false
+  - name: tests.py
+    visible: false
+    text: |
+      from test.tests import EasyRiderStage2
+      
+      if __name__ == '__main__':
+          EasyRiderStage2('easyrider.easyrider').run_tests()
+    learner_created: false
+  - name: easyrider/easyrider.py
+    visible: true
+    text: |
+      import json
+      import logging
+      import sys
+      
+      logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+      
+      
+      data = json.loads(input())
+      # logging.debug(data)
+      
+      required_keys = ['bus_id', 'stop_id', 'stop_name',
+                       'next_stop', 'a_time']
+      STOP_TYPE = 'stop_type'
+      all_keys = required_keys.copy()
+      all_keys.insert(4, STOP_TYPE)
+      # logging.debug(all_keys)
+      
+      data_types = dict(zip(all_keys, [int, int, str, int, str, str]))
+      # logging.debug(repr(data_types))
+      
+      errors = {key: 0 for key in all_keys}
+      # logging.debug(errors)
+      
+      # logging.debug(type(data[1]['stop_type']))
+      
+      for data_item in data:
+          for key in all_keys:
+              if type(data_item[key]) != data_types[key] \
+                      or key in required_keys and data_item[key] == "" \
+                      or key not in required_keys and len(data_item[STOP_TYPE]) > 1:
+                  errors[key] += 1
+              # equivalent to:
+              #
+              # if key in required_keys and data_item[key] == "":
+              #     errors[key] += 1
+              # elif key not in required_keys and len(data_item[STOP_TYPE]) > 1:
+              #     errors[key] += 1
+              # elif type(data_item[key]) != data_types[key]:
+              #     errors[key] += 1
+      # logging.debug(f"{errors=}")
+      
+      errors_total = sum(errors.values())
+      
+      print(f'Type and required field validation: {errors_total} errors')
+      for error, value in errors.items():
+          print(f"{error}: {value}")
+    learner_created: false
 feedback_link: https://hyperskill.org/learn/step/10889#comment
 status: Solved
 feedback:
