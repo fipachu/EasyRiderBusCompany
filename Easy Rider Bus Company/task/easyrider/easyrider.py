@@ -1,67 +1,33 @@
-import itertools
+# TODO: put all the stages in easyrider.py at once
+#       prolly will need to redo the whole thing using functional or OOP
 import json
-import logging
-import sys
+# import logging
+# import sys
 
+# logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 data = json.loads(input())
-lines = {}
-# lines = {line_1:
-#                  {'start_stops': set()
-#                   'transfer_stops': set()
-#                   'finish_stops': set()
-#                  }
-#          line_2:
-#                  {'start_stops': set()
-#                   'transfer_stops': set()
-#                   'finish_stops': set()
-#                  }...
-#          }
-# maybe get to counting special stops in the same loop
-# that scans for bus lines?
-# but then what if input data alternates bus lines?
-start_stops = set()
-transfer_stops = set()
-finish_stops = set()
+errors = []
 
-# scan for bus lines and put their stops names in dictionaries
+previous_id = data[0]["bus_id"]  # why preprocess if can not preprocess
+previous_time = -1
 for stop in data:
-    # logging.debug(f" current stop: {stop}")
-    line = stop['bus_id']
-    # logging.debug(f"current line: {line}")
-    if line not in lines:
-        lines[line] = {'all_stops': set(),
-                       'start_stops': set(),
-                       'transfer_stops': set(),
-                       'finish_stops': set()
-                       }
+    if stop["bus_id"] in [error[0] for error in errors]:  # if stop in bad line go to next stop
+        continue
+    if stop["bus_id"] != previous_id:  # if new line reset previous_time
+        previous_id = stop["bus_id"]
+        previous_time = -1
+    if int(stop['a_time'].replace(':', '')) <= previous_time:  # if time bad, save error
+        errors.append((stop["bus_id"], stop["stop_name"]))
+        # you could print the error here already, for worse readability!
+        # print(f'bus_id line {stop["bus_id"]}: wrong time on station {stop["stop_name"]}')
+        continue
+    previous_time = int(stop['a_time'].replace(':', ''))
 
-    stop_name = stop['stop_name']
-
-    lines[line]['all_stops'].add(stop_name)
-
-    stop_type = stop['stop_type']
-    if stop_type == 'S':
-        lines[line]['start_stops'].add(stop_name)
-        start_stops.add(stop_name)
-    elif stop_type == 'F':
-        lines[line]['finish_stops'].add(stop_name)
-        finish_stops.add(stop_name)
-
-for line, stops in lines.items():
-    # logging.debug(f'{line=}')
-    # logging.debug(f'{stops=}')
-    if len(stops['start_stops']) != 1 or len(stops['finish_stops']) != 1:
-        # print(f'There is no start or end stop for the line: {line}.')
-        print(f'Invalid number of start or end stops for the line: {line}.')
-        break
+print('Arrival time test:')
+if not errors:
+    print('OK')
 else:
-    combos = list(itertools.combinations(lines, 2))
-    for line1, line2 in combos:
-        transfer_stops.update(lines[line1]['all_stops'] & lines[line2]['all_stops'])
-
-    print(f'Start stops: {len(start_stops)} {sorted(start_stops)}')
-    print(f'Transfer stops: {len(transfer_stops)} {sorted(transfer_stops)}')
-    print(f'Finish stops: {len(finish_stops)} {sorted(finish_stops)}')
+    for line, station in errors:
+        print(f'bus_id line {line}: wrong time on station {station}')
