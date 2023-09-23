@@ -1,14 +1,4 @@
 type: matching
-captions:
-  - 88
-  - 101
-  - 276
-  - 300
-options:
-  - the third interval
-  - out of limit
-  - the first interval
-  - the second interval
 files:
   - name: main.py
     visible: true
@@ -19,8 +9,3 @@ files:
 feedback_link: https://hyperskill.org/learn/step/5929#comment
 status: Solved
 record: -1
-ordering:
-  - 0
-  - 1
-  - 2
-  - 3

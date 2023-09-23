@@ -1,12 +1,5 @@
 type: choice
 is_multiple_choice: false
-options:
-  - text: "elif, elif"
-  - text: "elif, else"
-  - text: "elif, if"
-  - text: "else, elif"
-  - text: "else, if"
-  - text: "if, else"
 files:
   - name: main.py
     visible: true
